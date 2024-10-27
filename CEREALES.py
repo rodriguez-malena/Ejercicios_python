@@ -41,10 +41,6 @@ def cereal_menos_kg(matrix:list,nombres_cereales:list)->list:
     return menor_cereal_por_depo
 
 def cereal_maximo_kg(matrix:list,nombre_cereales:list)->list:
-    """Función que calcula la máxima cantidad de kilos almacenados de cada cereal.
-    DE CADA CEREAL CUAL ALMACENÓ + KILOS 
-    LISTA QUE ACUMULE LA SUMA FINAL DE CADA COLUMNA DE CEREALES,LUEGO RECORRO
-    LA LISTA COMPARO Y MUESTRO CANTIDAD MAXIMA DE CADA CEREAL"""
     maximo_kg_por_cereal = [0] * len(matrix[0])
     for j in range(len(matrix[0])):
         for i in range(len(matrix)):
@@ -93,8 +89,6 @@ def depositos_mas_de_50000kg(cantidad_kg_depositos:list)->int:
     return contador_depositos_mas_50000kg
 
 def cereal_mayor_porcentaje(matrix:list,nombre_cereal:list):
-    """Porcentaje de kilos de cada cereal sobre el total de kilos almacenados.
-    Además mostrar el nombre del cereal con el máximo porcentaje."""
     cereales_kg = [0] * len(matrix[0])
     acumulador_kg = 0
     porcentaje_maximo = 0
@@ -120,8 +114,6 @@ def cereal_mayor_porcentaje(matrix:list,nombre_cereal:list):
     return porcentaje_por_cereal,porcentaje_maximo,cereal_mayor_porcentaje
             
 def informe_recaudaciones_odenado(matrix:list,precio_kg:int):
-    """Generar un informe con la recaudación de cada depósito, ordenada de
-mayor a menor."""
     recaudaciones = [0] * len(matrix)
     indices = [0] * len(matrix)
     
@@ -158,6 +150,7 @@ matriz = crear_matriz(3,4,0)
 
 
 bandera_salida = True
+bandera_existencias = False
 while bandera_salida:
     opcion = int(input("""Menú de opciones:
     1. Cargar existencia.
@@ -179,52 +172,73 @@ while bandera_salida:
             print("-"*50)
             cargar_existencias(matriz,5000,20000)
             mostrar_matriz(matriz)
+            bandera_existencias = True
             print("-"*50)
 
         case 2:
             print("-"*50)
-            cantidad_kilos = cantidad_kilos_por_deposito(matriz,0)
-            for i in range(len(cantidad_kilos)):
-                print(f"Depósito {i} = {cantidad_kilos[i]}kg")
+            if bandera_existencias:
+                cantidad_kilos = cantidad_kilos_por_deposito(matriz,0)
+                for i in range(len(cantidad_kilos)):
+                    print(f"Depósito {i} = {cantidad_kilos[i]}kg")
+            else:
+                print("Debe ingresar las existencias")
             print("-"*50)
 
         case 3:
             print("-"*50)
-            menor_cereal_deposito = cereal_menos_kg(matriz,lista_nombres_cereales)
-            for i in range(len(menor_cereal_deposito)):
-                print(f"Menor cereal del depósito {i}: {menor_cereal_deposito[i]}")
+            if bandera_existencias:
+                menor_cereal_deposito = cereal_menos_kg(matriz,lista_nombres_cereales)
+                for i in range(len(menor_cereal_deposito)):
+                    print(f"Menor cereal del depósito {i}: {menor_cereal_deposito[i]}")
+            else:
+                print("Debe ingresar las existencias")
             print("-"*50)
 
         case 4:
             print("-"*50)
-            maximo_kilo_cereal = cereal_maximo_kg(matriz,lista_nombres_cereales)
-            print(f"Cereal con máxima cantidad: {maximo_kilo_cereal[0]}, Cantidad: {maximo_kilo_cereal[1]} kg")
+            if bandera_existencias:
+                maximo_kilo_cereal = cereal_maximo_kg(matriz,lista_nombres_cereales)
+                print(f"Cereal con máxima cantidad: {maximo_kilo_cereal[0]}, Cantidad: {maximo_kilo_cereal[1]} kg")
+            else:
+                print("Debe ingresar las existencias")
             print("-"*50)
 
         case 5:
             print("-"*50)
-            deposito_recaudacion = deposito_mayor_recaudacion(matriz,valor_kg,lista_nombres_cereales)
-            print(f"Deposito con mayor recaudación: {deposito_recaudacion[0]} - Valor ${deposito_recaudacion[1]} ")
+            if bandera_existencias:
+                deposito_recaudacion = deposito_mayor_recaudacion(matriz,valor_kg,lista_nombres_cereales)
+                print(f"Deposito con mayor recaudación: {deposito_recaudacion[0]} - Valor ${deposito_recaudacion[1]} ")
+            else:
+                print("Debe ingresar las existencias")
             print("-"*50)
         
         case 6:
             print("-"*50)
-            mas_de_50000kg = depositos_mas_de_50000kg(cantidad_kilos)
-            print(f"Cantidad de depósitos con más de 50000kg = {mas_de_50000kg}")
+            if bandera_existencias:
+                mas_de_50000kg = depositos_mas_de_50000kg(cantidad_kilos)
+                print(f"Cantidad de depósitos con más de 50000kg = {mas_de_50000kg}")
+            else:
+                print("Debe ingresar las existencias") 
             print("-"*50)
         case 7:
             print("-"*50)
-            porcentaje_cereales,max_porcentaje, cereal_maximo = cereal_mayor_porcentaje(matriz,lista_nombres_cereales)
-            for i in range(len(porcentaje_cereales)):
-                print(f"Porcentaje de kilos de {lista_nombres_cereales[i]}: {porcentaje_cereales[i]}")
-                
-            print(f"El cereal con mayor porcentaje es {cereal_maximo} con {max_porcentaje:.2f}% ")
+            if bandera_existencias:
+                porcentaje_cereales,max_porcentaje, cereal_maximo = cereal_mayor_porcentaje(matriz,lista_nombres_cereales)
+                for i in range(len(porcentaje_cereales)):
+                    print(f"Porcentaje de kilos de {lista_nombres_cereales[i]}: {porcentaje_cereales[i]}") 
+                print(f"El cereal con mayor porcentaje es {cereal_maximo} con {max_porcentaje:.2f}% ")
+            else:
+                print("Debe ingresar las existencias")
             print("-"*50)
         case 8:
             print("-"*50)
-            recaudacion_orden, indice_orden= informe_recaudaciones_odenado(matriz,valor_kg)
-            for i in range(len(recaudacion_orden)):
-                print(f"Depósito:{indice_orden[i]} - Recaudación = ${recaudacion_orden[i]} ")
+            if bandera_existencias:
+                recaudacion_orden, indice_orden= informe_recaudaciones_odenado(matriz,valor_kg)
+                for i in range(len(recaudacion_orden)):
+                    print(f"Depósito:{indice_orden[i]} - Recaudación = ${recaudacion_orden[i]} ")
+            else:
+                print("Debe ingresar las existencias")
             print("-"*50)
         case 9:
             print("-"*50)
